@@ -1,4 +1,5 @@
-import { INGREDIENTES, SABORES } from "/data/ingredientes.js";
+import { INGREDIENTES, SABORES } from "./data/ingredientes.js";
+
 
 
 console.log("SCRIPT OK", INGREDIENTES, SABORES);
@@ -6,6 +7,8 @@ console.log("SCRIPT OK", INGREDIENTES, SABORES);
 
 document.getElementById("btnCalcular").addEventListener("click", () => {
   console.log("BOTÃO CLICADO");
+});
+
 
   const saborKey = document.getElementById("sabor").value;
   const qtd = Number(document.getElementById("qtdSabor").value);
@@ -25,4 +28,3 @@ Creme: ${creme.toFixed(1)} g
 
 Peso final: ${(qtd + leite + creme).toFixed(1)} g
 `;
-});
