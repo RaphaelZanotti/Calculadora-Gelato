@@ -16,12 +16,12 @@ function calcular() {
   const saborKey = document.getElementById("sabor").value;
   const qtdSabor = Number(document.getElementById("qtdSabor").value);
 
-  if (!saborKey || !qtdSabor) return;
+  if (!saborKey || qtdSabor <= 0) return;
 
   const sabor = ingredientes[saborKey];
 
   // =========================
-  // BASE INICIAL (SABOR)
+  // 1️⃣ BASE INICIAL (SABOR)
   // =========================
   let r = {
     peso: qtdSabor,
@@ -33,16 +33,10 @@ function calcular() {
   };
 
   // =========================
-  // 1️⃣ FECHAMENTO DE BASE → LEITE (SEMPRE)
+  // 2️⃣ BASE LÍQUIDA FIXA (LEITE)
   // =========================
-  let leite = 0;
-
-  // leite necessário para trazer sólidos para ~40%
-  leite =
-    (r.solidos / METAS.solidos - r.peso) /
-    (1 - ingredientes.leite.solidos);
-
-  leite = Math.max(0, leite);
+  // regra simples: para cada 100g de sabor, começa com 300g de leite
+  let leite = qtdSabor * 3;
 
   r.peso += leite;
   r.solidos += leite * ingredientes.leite.solidos;
@@ -52,16 +46,15 @@ function calcular() {
   r.pac += leite * ingredientes.leite.pac;
 
   // =========================
-  // 2️⃣ GORDURA → CREME
+  // 3️⃣ GORDURA → CREME
   // =========================
   let creme = 0;
+  const gorduraAtual = r.gordura / r.peso;
 
-  if (r.gordura / r.peso < METAS.gordura) {
+  if (gorduraAtual < METAS.gordura) {
     creme =
       (METAS.gordura * r.peso - r.gordura) /
       ingredientes.creme.gordura;
-
-    creme = Math.max(0, creme);
 
     r.peso += creme;
     r.solidos += creme * ingredientes.creme.solidos;
@@ -70,16 +63,15 @@ function calcular() {
   }
 
   // =========================
-  // 3️⃣ PROTEÍNA → LEITE EM PÓ
+  // 4️⃣ PROTEÍNA → LEITE EM PÓ
   // =========================
   let leiteEmPo = 0;
+  const proteinaAtual = r.proteina / r.peso;
 
-  if (r.proteina / r.peso < METAS.proteina) {
+  if (proteinaAtual < METAS.proteina) {
     leiteEmPo =
       (METAS.proteina * r.peso - r.proteina) /
       ingredientes.leiteEmPo.proteina;
-
-    leiteEmPo = Math.max(0, leiteEmPo);
 
     r.peso += leiteEmPo;
     r.solidos += leiteEmPo;
@@ -90,7 +82,7 @@ function calcular() {
   }
 
   // =========================
-  // 4️⃣ POD → SACAROSE
+  // 5️⃣ POD → AÇÚCAR
   // =========================
   let acucar =
     (METAS.pod * r.peso - r.pod) /
@@ -104,7 +96,7 @@ function calcular() {
   r.pac += acucar * ingredientes.acucar.pac;
 
   // =========================
-  // 5️⃣ PAC → DEXTROSE
+  // 6️⃣ PAC → DEXTROSE
   // =========================
   let dextrose =
     (METAS.pac * r.peso - r.pac) /
@@ -118,7 +110,7 @@ function calcular() {
   r.pac += dextrose * ingredientes.dextrose.pac;
 
   // =========================
-  // 6️⃣ ESTABILIZANTES
+  // 7️⃣ ESTABILIZANTES
   // =========================
   const guar = r.peso * ingredientes.gomaGuar.limite;
   const lbg = r.peso * ingredientes.gomaAlfarroba.limite;
@@ -127,15 +119,17 @@ function calcular() {
   r.solidos += guar + lbg;
 
   // =========================
-  // RESULTADO
+  // RESULTADOS
   // =========================
+  const liquidos = r.peso - r.solidos;
+
   document.getElementById("resultado").textContent = `
 Sabor: ${sabor.nome}
 
 Saborizante: ${qtdSabor.toFixed(1)} g
 Leite: ${leite.toFixed(1)} g
-Leite em pó: ${leiteEmPo.toFixed(1)} g
 Creme: ${creme.toFixed(1)} g
+Leite em pó: ${leiteEmPo.toFixed(1)} g
 Açúcar: ${acucar.toFixed(1)} g
 Dextrose: ${dextrose.toFixed(1)} g
 Goma guar: ${guar.toFixed(1)} g
@@ -144,6 +138,7 @@ Goma alfarroba: ${lbg.toFixed(1)} g
 Peso final da calda: ${r.peso.toFixed(1)} g
 
 Sólidos: ${(r.solidos / r.peso * 100).toFixed(1)} %
+Líquidos: ${(liquidos / r.peso * 100).toFixed(1)} %
 Gordura: ${(r.gordura / r.peso * 100).toFixed(1)} %
 Proteína: ${(r.proteina / r.peso * 100).toFixed(1)} %
 POD: ${(r.pod / r.peso).toFixed(0)}
