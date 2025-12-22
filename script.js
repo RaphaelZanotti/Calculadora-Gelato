@@ -1,45 +1,22 @@
 import { ingredientes } from "./data/ingredientes.js";
+import { sabores } from "./data/sabores.js";
 
-const metasPorModo = {
-  gelato: {
-    solidos: 0.40,
-    gordura: 0.09,
-    proteinaMin: 0.05,
+export function calcularReceita(input) {
+  const pesoTotal = input.pesoTotal;
+  const modo = input.modo;
+
+  const metas = modo === "SORBET"
+    ? { pod: 220, pac: 320 }
+    : { pod: 180, pac: 280 };
+
+  const LIMITES = {
+    gorduraMax: 0.10,
     proteinaMax: 0.06,
-    pod: 180,
-    pac: 280
-  },
-  sorbet: {
-    solidos: 0.32,
-    gordura: 0,
-    proteinaMin: 0,
-    proteinaMax: 0,
-    pod: 220,
-    pac: 320
-  }
-};
+    gorduraMin: 0.07,
+    proteinaMin: 0.045
+  };
 
-const saborizantes = [
-  "pistache","chocolate","morango","coco",
-  "avela","amendoim","cumaru","doceDeLeite"
-];
-
-const inputsDiv = document.getElementById("inputs");
-
-saborizantes.forEach(key => {
-  inputsDiv.innerHTML += `
-    <label>${ingredientes[key].nome}:
-      <input type="number" id="${key}" value="0">
-    </label><br>
-  `;
-});
-
-window.calcular = function () {
-
-  const pesoTotal = Number(document.getElementById("pesoTotal").value);
-  const modo = document.getElementById("modo").value;
-  const metas = metasPorModo[modo];
-
+  let receita = {};
   let totais = {
     peso: 0,
     solidos: 0,
@@ -49,12 +26,11 @@ window.calcular = function () {
     pac: 0
   };
 
-  // =========================
-  // SOMA SABORIZANTES
-  // =========================
-  saborizantes.forEach(key => {
-    const qtd = Number(document.getElementById(key).value);
-    const ing = ingredientes[key];
+  // 1️⃣ Saborizantes
+  Object.entries(input.saborizantes).forEach(([nome, qtd]) => {
+    if (qtd <= 0) return;
+    const ing = ingredientes[nome];
+    receita[nome] = qtd;
 
     totais.peso += qtd;
     totais.solidos += qtd * ing.solidos;
@@ -64,76 +40,78 @@ window.calcular = function () {
     totais.pac += qtd * ing.pac;
   });
 
-  // =========================
-  // ESTABILIZANTES
-  // =========================
-  const guar = pesoTotal * ingredientes.gomaGuar.limite;
-  const lbg = pesoTotal * ingredientes.gomaAlfarroba.limite;
+  // 2️⃣ Gomas (fixas por kg)
+  const gomaGuar = pesoTotal * 0.003;
+  const gomaAlfarroba = pesoTotal * 0.002;
 
-  totais.peso += guar + lbg;
-  totais.solidos += guar + lbg;
+  receita["goma_guar"] = gomaGuar;
+  receita["goma_alfarroba"] = gomaAlfarroba;
 
-  // =========================
-  // LEITE EM PÓ (só gelato)
-  // =========================
-  let leiteEmPo = 0;
-  if (modo === "gelato") {
-    const alvoSolidos = pesoTotal * metas.solidos;
-    const faltaSolidos = alvoSolidos - totais.solidos;
-    leiteEmPo = Math.max(0, faltaSolidos / ingredientes.leiteEmPo.solidos);
+  totais.peso += gomaGuar + gomaAlfarroba;
+  totais.solidos += (gomaGuar + gomaAlfarroba);
 
-    totais.peso += leiteEmPo;
-    totais.solidos += leiteEmPo * ingredientes.leiteEmPo.solidos;
-    totais.gordura += leiteEmPo * ingredientes.leiteEmPo.gordura;
-    totais.proteina += leiteEmPo * ingredientes.leiteEmPo.proteina;
-    totais.pod += leiteEmPo * ingredientes.leiteEmPo.pod;
-    totais.pac += leiteEmPo * ingredientes.leiteEmPo.pac;
+  // 3️⃣ Base láctea controlada
+  if (modo === "GELATO") {
+    let leitePo = pesoTotal * 0.30;
+
+    const gorduraAtual = totais.gordura / totais.peso;
+    const proteinaAtual = totais.proteina / totais.peso;
+
+    if (proteinaAtual > LIMITES.proteinaMax) leitePo *= 0.7;
+    if (gorduraAtual > LIMITES.gorduraMax) leitePo *= 0.6;
+
+    receita["leite_po"] = leitePo;
+
+    const lp = ingredientes["leite_po"];
+    totais.peso += leitePo;
+    totais.solidos += leitePo * lp.solidos;
+    totais.gordura += leitePo * lp.gordura;
+    totais.proteina += leitePo * lp.proteina;
+    totais.pod += leitePo * lp.pod;
+    totais.pac += leitePo * lp.pac;
   }
 
-  // =========================
-  // CREME (só gelato)
-  // =========================
-  let creme = 0;
-  if (modo === "gelato") {
-    const alvoGordura = pesoTotal * metas.gordura;
-    const faltaGordura = alvoGordura - totais.gordura;
-    creme = Math.max(0, faltaGordura / ingredientes.creme.gordura);
-    totais.peso += creme;
+  // 4️⃣ Correção de POD/PAC com dextrose
+  let podAtual = totais.pod / totais.peso;
+  let pacAtual = totais.pac / totais.peso;
+
+  let dextrose = 0;
+  if (podAtual < metas.pod || pacAtual < metas.pac) {
+    dextrose = pesoTotal * 0.06;
+    receita["dextrose"] = dextrose;
+
+    const dx = ingredientes["dextrose"];
+    totais.peso += dextrose;
+    totais.solidos += dextrose;
+    totais.pod += dextrose * dx.pod;
+    totais.pac += dextrose * dx.pac;
   }
 
-  // =========================
-  // AÇÚCARES (POD / PAC)
-  // =========================
-  const faltaPAC = metas.pac - totais.pac;
-  const dextrose = Math.max(0, faltaPAC / ingredientes.dextrose.pac);
+  // 5️⃣ Sólidos neutros (sem mexer em gordura/proteína)
+  const solidosAtual = totais.solidos / totais.peso;
+  if (solidosAtual < 0.40) {
+    const maltodextrina = pesoTotal * 0.04;
+    receita["maltodextrina"] = maltodextrina;
 
-  totais.peso += dextrose;
-  totais.solidos += dextrose;
-  totais.pod += dextrose * ingredientes.dextrose.pod;
-  totais.pac += dextrose * ingredientes.dextrose.pac;
+    totais.peso += maltodextrina;
+    totais.solidos += maltodextrina;
+  }
 
-  // =========================
-  // FECHAMENTO COM ÁGUA
-  // =========================
-  const agua = Math.max(0, pesoTotal - totais.peso);
+  // 6️⃣ Água para fechar peso
+  const agua = pesoTotal - totais.peso;
+  receita["agua"] = agua;
 
-  // =========================
-  // RESULTADO
-  // =========================
-  document.getElementById("resultado").textContent = `
-MODO: ${modo.toUpperCase()}
+  totais.peso += agua;
 
-Leite em pó: ${leiteEmPo.toFixed(1)} g
-Creme: ${creme.toFixed(1)} g
-Dextrose: ${dextrose.toFixed(1)} g
-Goma guar: ${guar.toFixed(1)} g
-Goma alfarroba: ${lbg.toFixed(1)} g
-Água: ${agua.toFixed(1)} g
-
-Sólidos: ${(totais.solidos / pesoTotal * 100).toFixed(2)} %
-Gordura: ${(totais.gordura / pesoTotal * 100).toFixed(2)} %
-Proteína: ${(totais.proteina / pesoTotal * 100).toFixed(2)} %
-POD: ${totais.pod.toFixed(0)}
-PAC: ${totais.pac.toFixed(0)}
-`;
-};
+  // 🔢 Resultados finais normalizados
+  return {
+    receita,
+    resultados: {
+      solidos: (totais.solidos / totais.peso * 100).toFixed(2),
+      gordura: (totais.gordura / totais.peso * 100).toFixed(2),
+      proteina: (totais.proteina / totais.peso * 100).toFixed(2),
+      pod: (totais.pod / totais.peso).toFixed(0),
+      pac: (totais.pac / totais.peso).toFixed(0)
+    }
+  };
+}
