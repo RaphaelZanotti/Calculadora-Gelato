@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Calculadora de Gelato</title>
 </head>
 <body>
 
-  <h2>Calculadora de Gelato</h2>
+<h2>Calculadora de Gelato</h2>
 
-  <label>Sabor:</label>
-  <select id="sabor">
-    <option value="pistache">Pistache</option>
-    <option value="morango">Morango</option>
-    <option value="amendoim">Amendoim</option>
-    <option value="avela">Avelã</option>
-  </select>
+<label>Sabor:</label>
+<select id="sabor">
+  <option value="pistache">Pistache</option>
+  <option value="avela">Avelã</option>
+  <option value="morango">Morango</option>
+</select>
 
-  <br><br>
+<br><br>
 
-  <label>Quantidade do sabor (g):</label>
-  <input type="number" id="qtdSabor" value="100" />
+<label>Quantidade do sabor (g):</label>
+<input type="number" id="qtdSabor" value="100">
 
-  <br><br>
+<br><br>
 
-  <button id="btnCalcular">Calcular</button>
+<button id="btnCalcular">Calcular</button>
 
-  <pre id="resultado"></pre>
+<pre id="resultado"></pre>
 
-  <!-- IMPORTANTE -->
-  <script type="module" src="./script.js"></script>
+<!-- ⚠️ SCRIPT NO FINAL, SEM MODULE -->
+<script src="ingredientes.js"></script>
+<script src="script.js"></script>
+
 </body>
 </html>
