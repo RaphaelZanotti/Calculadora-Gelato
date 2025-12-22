@@ -2,9 +2,10 @@ import { ingredientes } from "./data/ingredientes.js";
 
 const METAS = {
   solidos: 0.40,
-  solidosBaseMin: 0.32,
   gordura: 0.10,
-  proteina: 0.06
+  proteina: 0.06,
+  pod: 180,
+  pac: 270
 };
 
 document
@@ -12,11 +13,16 @@ document
   .addEventListener("click", calcular);
 
 function calcular() {
-
   const saborKey = document.getElementById("sabor").value;
   const qtdSabor = Number(document.getElementById("qtdSabor").value);
+
+  if (!saborKey || !qtdSabor) return;
+
   const sabor = ingredientes[saborKey];
 
+  // =========================
+  // BASE INICIAL (SABOR)
+  // =========================
   let r = {
     peso: qtdSabor,
     solidos: qtdSabor * sabor.solidos,
@@ -27,19 +33,23 @@ function calcular() {
   };
 
   // =========================
-  // 1️⃣ FECHAMENTO DE LÍQUIDO → LEITE
+  // 1️⃣ FECHAMENTO DE BASE → LEITE (SEMPRE)
   // =========================
   let leite = 0;
 
-  while (r.solidos / r.peso < METAS.solidosBaseMin) {
-    leite += 10;
-    r.peso += 10;
-    r.solidos += 10 * ingredientes.leite.solidos;
-    r.gordura += 10 * ingredientes.leite.gordura;
-    r.proteina += 10 * ingredientes.leite.proteina;
-    r.pod += 10 * ingredientes.leite.pod;
-    r.pac += 10 * ingredientes.leite.pac;
-  }
+  // leite necessário para trazer sólidos para ~40%
+  leite =
+    (r.solidos / METAS.solidos - r.peso) /
+    (1 - ingredientes.leite.solidos);
+
+  leite = Math.max(0, leite);
+
+  r.peso += leite;
+  r.solidos += leite * ingredientes.leite.solidos;
+  r.gordura += leite * ingredientes.leite.gordura;
+  r.proteina += leite * ingredientes.leite.proteina;
+  r.pod += leite * ingredientes.leite.pod;
+  r.pac += leite * ingredientes.leite.pac;
 
   // =========================
   // 2️⃣ GORDURA → CREME
@@ -80,32 +90,32 @@ function calcular() {
   }
 
   // =========================
-  // 4️⃣ AÇÚCARES (PROPORÇÃO FIXA)
+  // 4️⃣ POD → SACAROSE
   // =========================
-  const acucar = r.peso * 0.15;   // 15%
-  const dextrose = r.peso * 0.05; // 5%
+  let acucar =
+    (METAS.pod * r.peso - r.pod) /
+    ingredientes.acucar.pod;
 
-  r.peso += acucar + dextrose;
-  r.solidos += acucar + dextrose;
+  acucar = Math.max(0, acucar);
 
-  r.pod +=
-    acucar * ingredientes.acucar.pod +
-    dextrose * ingredientes.dextrose.pod;
-
-  r.pac +=
-    acucar * ingredientes.acucar.pac +
-    dextrose * ingredientes.dextrose.pac;
+  r.peso += acucar;
+  r.solidos += acucar;
+  r.pod += acucar * ingredientes.acucar.pod;
+  r.pac += acucar * ingredientes.acucar.pac;
 
   // =========================
-  // 5️⃣ AJUSTE FINAL DE SÓLIDOS
+  // 5️⃣ PAC → DEXTROSE
   // =========================
-  let maltodextrina =
-    METAS.solidos * r.peso - r.solidos;
+  let dextrose =
+    (METAS.pac * r.peso - r.pac) /
+    ingredientes.dextrose.pac;
 
-  maltodextrina = Math.max(0, maltodextrina);
+  dextrose = Math.max(0, dextrose);
 
-  r.peso += maltodextrina;
-  r.solidos += maltodextrina;
+  r.peso += dextrose;
+  r.solidos += dextrose;
+  r.pod += dextrose * ingredientes.dextrose.pod;
+  r.pac += dextrose * ingredientes.dextrose.pac;
 
   // =========================
   // 6️⃣ ESTABILIZANTES
@@ -128,7 +138,6 @@ Leite em pó: ${leiteEmPo.toFixed(1)} g
 Creme: ${creme.toFixed(1)} g
 Açúcar: ${acucar.toFixed(1)} g
 Dextrose: ${dextrose.toFixed(1)} g
-Maltodextrina: ${maltodextrina.toFixed(1)} g
 Goma guar: ${guar.toFixed(1)} g
 Goma alfarroba: ${lbg.toFixed(1)} g
 
