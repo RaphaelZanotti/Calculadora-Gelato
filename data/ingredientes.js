@@ -1,6 +1,6 @@
 export const INGREDIENTES = {
   leite: { solidos: 0.12, gordura: 0.035, proteina: 0.032 },
-  creme: { solidos: 0.40, gordura: 0.35, proteina: 0.025 },
+  creme: { solidos: 0.40, gordura: 0.35, proteina: 0.025 }
 };
 
 export const SABORES = {

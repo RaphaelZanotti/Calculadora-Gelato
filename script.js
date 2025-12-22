@@ -1,22 +1,18 @@
-import { INGREDIENTES, SABORES } from "./ingredientes.js";
+import { INGREDIENTES, SABORES } from "/data/ingredientes.js";
 
-console.log("SCRIPT CARREGADO COM SUCESSO");
+
+console.log("SCRIPT OK", INGREDIENTES, SABORES);
+
 
 document.getElementById("btnCalcular").addEventListener("click", () => {
   console.log("BOTÃO CLICADO");
 
   const saborKey = document.getElementById("sabor").value;
   const qtd = Number(document.getElementById("qtdSabor").value);
-
   const sabor = SABORES[saborKey];
 
-  if (!sabor) {
-    console.error("Sabor não encontrado:", saborKey);
-    return;
-  }
-
-  // cálculo simples de teste
   const pesoFinal = (qtd * sabor.solidos) / 0.40;
+
   const leite = pesoFinal * 0.55;
   const creme = pesoFinal * 0.08;
 
