@@ -1,5 +1,14 @@
 import { ingredientes } from "./data/ingredientes.js";
 
+document.getElementById("btnCalcular")
+  .addEventListener("click", calcular);
+
+function calcular() {
+  console.log("Calculando...");
+  // resto do código
+}
+
+
 const METAS = {
   solidos: 0.40,
   gordura: 0.10,
