@@ -1,82 +1,88 @@
 import { INGREDIENTES, SABORES } from "./data/ingredientes.js";
 
-const METAS = {
-  solidosMin: 0.35,
-  solidosMax: 0.45,
-  gorduraMin: 0.06,
-  gorduraMax: 0.10,
-  proteinaMin: 0.03,
-  proteinaMax: 0.05,
-  pod: 180,
-  pac: 270
-};
-
 function calcular() {
   const saborKey = document.getElementById("sabor").value;
   const qtdSabor = Number(document.getElementById("qtdSabor").value);
   const sabor = SABORES[saborKey];
 
+  // ===============================
+  // ACUMULADORES
+  // ===============================
   let r = {
     peso: qtdSabor,
     solidos: qtdSabor * sabor.solidos,
     gordura: qtdSabor * sabor.gordura,
     proteina: qtdSabor * sabor.proteina,
-    pod: qtdSabor * sabor.pod,
-    pac: qtdSabor * sabor.pac
+    pod: qtdSabor * (sabor.pod || 0),
+    pac: qtdSabor * (sabor.pac || 0)
   };
 
-  // 1️⃣ Definir peso alvo (40% sólidos)
-  const pesoAlvo = r.solidos / 0.40;
-  const liquidos = pesoAlvo - r.peso;
+  // ===============================
+  // 1️⃣ BASE LÁCTEA FIXA (NUNCA NEGATIVA)
+  // ===============================
+  let leite, creme;
 
-  const leite = liquidos * 0.75;
-  const creme = liquidos * 0.25;
+  if (sabor.tipo === "fruta") {
+    leite = qtdSabor * 0.6;
+    creme = qtdSabor * 0.15;
+  } else {
+    leite = qtdSabor * 0.9;
+    creme = qtdSabor * 0.3;
+  }
 
   r.peso += leite + creme;
-  r.solidos += leite * INGREDIENTES.leite.solidos + creme * INGREDIENTES.creme.solidos;
-  r.gordura += leite * INGREDIENTES.leite.gordura + creme * INGREDIENTES.creme.gordura;
-  r.proteina += leite * INGREDIENTES.leite.proteina + creme * INGREDIENTES.creme.proteina;
 
-  // 2️⃣ Açúcares – base fixa (evita explosão)
-  let acucar = 0;
-  let dextrose = 0;
-  let glicose = 0;
+  r.solidos +=
+    leite * INGREDIENTES.leite.solidos +
+    creme * INGREDIENTES.creme.solidos;
 
-  const percAcucares = 0.18; // 18% do peso final estimado
-  const pesoBase = r.peso / (1 - percAcucares);
-  const totalAcucares = pesoBase * percAcucares;
+  r.gordura +=
+    leite * INGREDIENTES.leite.gordura +
+    creme * INGREDIENTES.creme.gordura;
 
-  // proporções clássicas
-  acucar   = totalAcucares * 0.50;
-  dextrose = totalAcucares * 0.30;
-  glicose  = totalAcucares * 0.20;
+  r.proteina +=
+    leite * INGREDIENTES.leite.proteina +
+    creme * INGREDIENTES.creme.proteina;
 
-  // aplicar glicose
-  r.peso += glicose;
-  r.solidos += glicose * INGREDIENTES.glicose.solidos;
-  r.pod += glicose * INGREDIENTES.glicose.pod;
-  r.pac += glicose * INGREDIENTES.glicose.pac;
+  // ===============================
+  // 2️⃣ AÇÚCARES (MODELO PROFISSIONAL)
+  // ===============================
+  const percAcucares = sabor.tipo === "fruta" ? 0.16 : 0.20;
+  const totalAcucares = r.peso * percAcucares;
 
-  // aplicar sacarose
-  r.peso += acucar;
+  const acucar   = totalAcucares * 0.50;
+  const dextrose = totalAcucares * 0.30;
+  const glicose  = totalAcucares * 0.20;
+
+  r.peso += acucar + dextrose + glicose;
+
+  // Sacarose
   r.solidos += acucar;
   r.pod += acucar * INGREDIENTES.acucar.pod;
   r.pac += acucar * INGREDIENTES.acucar.pac;
 
-  // aplicar dextrose
-  r.peso += dextrose;
+  // Dextrose
   r.solidos += dextrose;
   r.pod += dextrose * INGREDIENTES.dextrose.pod;
   r.pac += dextrose * INGREDIENTES.dextrose.pac;
 
+  // Glicose de milho
+  r.solidos += glicose * INGREDIENTES.glicose.solidos;
+  r.pod += glicose * INGREDIENTES.glicose.pod;
+  r.pac += glicose * INGREDIENTES.glicose.pac;
 
-  // 3️⃣ Estabilizantes
+  // ===============================
+  // 3️⃣ ESTABILIZANTES
+  // ===============================
   const guar = r.peso * INGREDIENTES.gomaGuar.limite;
-  const lbg = r.peso * INGREDIENTES.gomaAlfarroba.limite;
+  const lbg  = r.peso * INGREDIENTES.gomaAlfarroba.limite;
 
   r.peso += guar + lbg;
   r.solidos += guar + lbg;
 
+  // ===============================
+  // 4️⃣ RESULTADO
+  // ===============================
   document.getElementById("resultado").textContent = `
 Sabor: ${sabor.nome}
 
