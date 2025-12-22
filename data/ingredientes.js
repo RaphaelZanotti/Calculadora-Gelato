@@ -1,182 +1,110 @@
-export const ingredientes = {
+// ingredientes.js
 
-  // =========================
-  // SABORIZANTES
-  // =========================
-
-  pistache: {
-    nome: "Pasta de pistache",
-    solidos: 1.00,
-    gordura: 0.45,
-    proteina: 0.16,
-    pod: 0.20,
-    pac: 0.25
-  },
-
-  morango: {
-    nome: "Morango in natura",
-    solidos: 0.10,
-    gordura: 0.00,
-    proteina: 0.01,
-    pod: 0.05,
-    pac: 0.10
-  },
-
-  coco: {
-    nome: "Coco (leite + ralado)",
-    solidos: 0.30,
-    gordura: 0.22,
-    proteina: 0.04,
-    pod: 0.10,
-    pac: 0.15
-  },
-
-  amendoim: {
-    nome: "Pasta de amendoim",
-    solidos: 1.00,
-    gordura: 0.50,
-    proteina: 0.25,
-    pod: 0.15,
-    pac: 0.20
-  },
-
-  avela: {
-    nome: "Pasta de avelã",
-    solidos: 1.00,
-    gordura: 0.60,
-    proteina: 0.15,
-    pod: 0.15,
-    pac: 0.20
-  },
-
-  misso: {
-    nome: "Pasta de missô",
-    solidos: 0.55,
-    gordura: 0.06,
-    proteina: 0.12,
-    pod: 0.05,
-    pac: 0.10
-  },
-
-  doceDeLeite: {
-    nome: "Doce de leite",
-    solidos: 0.70,
-    gordura: 0.08,
-    proteina: 0.05,
-    pod: 0.60,
-    pac: 0.65
-  },
-
-  caramelo: {
-    nome: "Caramelo salgado",
-    solidos: 0.85,
-    gordura: 0.05,
-    proteina: 0.01,
-    pod: 0.90,
-    pac: 0.95
-  },
-
-  chocolate: {
-    nome: "Chocolate",
-    solidos: 1.00,
-    gordura: 0.30,
-    proteina: 0.08,
-    pod: 0.25,
-    pac: 0.30
-  },
-
-  limao: {
-    nome: "Infusão de limão",
-    solidos: 0.03,
-    gordura: 0.00,
-    proteina: 0.00,
-    pod: 0.02,
-    pac: 0.05
-  },
-
-  baunilha: {
-    nome: "Baunilha",
-    solidos: 0.02,
-    gordura: 0.00,
-    proteina: 0.00,
-    pod: 0.01,
-    pac: 0.03
-  },
-
-  cumaru: {
-    nome: "Cumaru",
-    solidos: 0.05,
-    gordura: 0.02,
-    proteina: 0.01,
-    pod: 0.03,
-    pac: 0.06
-  },
-
-  // =========================
-  // BASE LÁCTEA
-  // =========================
-
+export const INGREDIENTES_BASE = {
   leite: {
+    nome: "Leite integral",
+    agua: 0.88,
     solidos: 0.12,
     gordura: 0.035,
     proteina: 0.032,
-    pod: 0.05,
-    pac: 0.06
+    pod: 0,
+    pac: 0
   },
-
   creme: {
-    solidos: 0.45,
+    nome: "Creme de leite",
+    agua: 0.60,
+    solidos: 0.40,
     gordura: 0.35,
-    proteina: 0.02,
-    pod: 0.02,
-    pac: 0.03
+    proteina: 0.025,
+    pod: 0,
+    pac: 0
   },
-
-  leiteEmPo: {
-    solidos: 1.00,
-    gordura: 0.01,
-    proteina: 0.36,
-    pod: 0.08,
-    pac: 0.10
-  },
-
-  // =========================
-  // AÇÚCARES
-  // =========================
-
   acucar: {
-    solidos: 1.00,
-    pod: 1.00,
-    pac: 1.00
+    nome: "Açúcar",
+    agua: 0,
+    solidos: 1,
+    gordura: 0,
+    proteina: 0,
+    pod: 100,
+    pac: 100
   },
-
   dextrose: {
-    solidos: 1.00,
-    pod: 0.70,
-    pac: 1.90
+    nome: "Dextrose",
+    agua: 0,
+    solidos: 1,
+    gordura: 0,
+    proteina: 0,
+    pod: 70,
+    pac: 190
   },
-
   glicose: {
+    nome: "Glicose de milho",
+    agua: 0.20,
     solidos: 0.80,
-    pod: 0.60,
-    pac: 1.30
+    gordura: 0,
+    proteina: 0,
+    pod: 40,
+    pac: 60
   },
-
-  maltodextrina: {
-    solidos: 1.00,
-    pod: 0.10,
-    pac: 0.10
+  guar: {
+    nome: "Goma guar",
+    agua: 0,
+    solidos: 1,
+    gordura: 0,
+    proteina: 0,
+    pod: 0,
+    pac: 0
   },
-
-  // =========================
-  // ESTABILIZANTES
-  // =========================
-
-  gomaGuar: {
-    limite: 0.0025
-  },
-
-  gomaAlfarroba: {
-    limite: 0.0025
+  alfarroba: {
+    nome: "Goma alfarroba",
+    agua: 0,
+    solidos: 1,
+    gordura: 0,
+    proteina: 0,
+    pod: 0,
+    pac: 0
   }
-};
+}
+
+export const SABORES = {
+  avela: {
+    nome: "Pasta de avelã",
+    agua: 0.05,
+    solidos: 0.95,
+    gordura: 0.60,
+    proteina: 0.15,
+    tipo: "concentrado"
+  },
+  pistache: {
+    nome: "Pasta de pistache",
+    agua: 0.08,
+    solidos: 0.92,
+    gordura: 0.55,
+    proteina: 0.18,
+    tipo: "concentrado"
+  },
+  amendoim: {
+    nome: "Pasta de amendoim",
+    agua: 0.05,
+    solidos: 0.95,
+    gordura: 0.50,
+    proteina: 0.25,
+    tipo: "concentrado"
+  },
+  morango: {
+    nome: "Morango in natura",
+    agua: 0.90,
+    solidos: 0.10,
+    gordura: 0,
+    proteina: 0.01,
+    tipo: "aquoso"
+  },
+  baunilha: {
+    nome: "Baunilha",
+    agua: 0.95,
+    solidos: 0.05,
+    gordura: 0,
+    proteina: 0,
+    tipo: "infusao"
+  }
+}
