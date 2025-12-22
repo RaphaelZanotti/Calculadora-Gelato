@@ -92,7 +92,30 @@ window.calcular = function () {
   // ========================
   // ÁGUA (FECHAMENTO)
   // ========================
-  const agua = r.peso * (1 - METAS.solidos);
+  let leite = 0;
+  let agua = 0;
+
+  if (modo === "gelato") {
+    const alvoSolidos = METAS.solidos;
+    let solidosAtuais = r.solidos / r.peso;
+
+    while (solidosAtuais < alvoSolidos) {
+        leite += 10; // passo de ajuste
+        r.peso += 10;
+        r.solidos += 10 * ingredientes.leite.solidos;
+        r.gordura += 10 * ingredientes.leite.gordura;
+        r.proteina += 10 * ingredientes.leite.proteina;
+        r.pod += 10 * ingredientes.leite.pod;
+        r.pac += 10 * ingredientes.leite.pac;
+
+        solidosAtuais = r.solidos / r.peso;
+    }
+} else {
+  // SORBET
+  agua =
+    r.peso * ((1 - METAS.solidos) / METAS.solidos);
+}
+
 
   // ========================
   // RESULTADO FINAL
