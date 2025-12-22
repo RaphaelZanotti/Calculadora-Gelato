@@ -1,7 +1,4 @@
-import { ingredientes } from "./data/ingredientes.js";
-
-
-
+import { ingredientes } from ".\data\ingredientes.js";
 
 
 document.getElementById("btnCalcular").onclick = function () {
