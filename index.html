@@ -9,23 +9,33 @@
 
 <h1>Formulador Profissional de Gelato</h1>
 
-<label>Saborizante:</label>
-<select id="sabor">
-  <option value="pistache">Pistache</option>
-  <option value="chocolate">Chocolate</option>
-  <option value="morango">Morango</option>
-</select>
+<label>Sabor:
+  <select id="sabor">
+    <option value="pistache">Pistache</option>
+    <option value="morango">Morango in natura</option>
+    <option value="coco">Coco (leite + ralado)</option>
+    <option value="amendoim">Pasta de amendoim</option>
+    <option value="avela">Pasta de avelã</option>
+    <option value="misso">Pasta de missô</option>
+    <option value="doceDeLeite">Doce de leite</option>
+    <option value="caramelo">Caramelo salgado</option>
+    <option value="chocolate">Chocolate</option>
+    <option value="limao">Infusão de limão</option>
+    <option value="baunilha">Baunilha</option>
+    <option value="cumaru">Cumaru</option>
+  </select>
+</label>
 
 <br><br>
 
-<label>Quantidade do saborizante (g):</label>
-<input type="number" id="qtdSabor" value="90">
+<label>Quantidade do sabor (g):
+  <input type="number" id="qtdSabor" value="100">
+</label>
 
 <br><br>
 
-<button onclick="calcular()">Calcular Receita</button>
+<button onclick="calcular()">Calcular</button>
 
-<h2>Resultado</h2>
 <pre id="resultado"></pre>
 
 <script type="module" src="script.js"></script>
