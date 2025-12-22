@@ -4,11 +4,7 @@ const METAS = {
   solidos: 0.40,
   solidosBaseMin: 0.32,
   gordura: 0.10,
-  proteina: 0.06,
-
-  // limites estruturais
-  acucarMax: 0.22,     // 22%
-  dextroseMax: 0.08    // 8%
+  proteina: 0.06
 };
 
 document
@@ -31,7 +27,7 @@ function calcular() {
   };
 
   // =========================
-  // 1️⃣ BASE LÍQUIDA → LEITE
+  // 1️⃣ FECHAMENTO DE LÍQUIDO → LEITE
   // =========================
   let leite = 0;
 
@@ -84,25 +80,24 @@ function calcular() {
   }
 
   // =========================
-  // 4️⃣ AÇÚCARES (FAIXA REALISTA)
+  // 4️⃣ AÇÚCARES (PROPORÇÃO FIXA)
   // =========================
-  let acucar = r.peso * 0.14;    // 14%
-  let dextrose = r.peso * 0.05;  // 5%
-
-  acucar = Math.min(acucar, r.peso * METAS.acucarMax);
-  dextrose = Math.min(dextrose, r.peso * METAS.dextroseMax);
+  const acucar = r.peso * 0.15;   // 15%
+  const dextrose = r.peso * 0.05; // 5%
 
   r.peso += acucar + dextrose;
   r.solidos += acucar + dextrose;
 
-  r.pod += acucar * ingredientes.acucar.pod;
-  r.pac += acucar * ingredientes.acucar.pac;
+  r.pod +=
+    acucar * ingredientes.acucar.pod +
+    dextrose * ingredientes.dextrose.pod;
 
-  r.pod += dextrose * ingredientes.dextrose.pod;
-  r.pac += dextrose * ingredientes.dextrose.pac;
+  r.pac +=
+    acucar * ingredientes.acucar.pac +
+    dextrose * ingredientes.dextrose.pac;
 
   // =========================
-  // 5️⃣ AJUSTE FINO DE SÓLIDOS
+  // 5️⃣ AJUSTE FINAL DE SÓLIDOS
   // =========================
   let maltodextrina =
     METAS.solidos * r.peso - r.solidos;
@@ -122,7 +117,7 @@ function calcular() {
   r.solidos += guar + lbg;
 
   // =========================
-  // RESULTADOS FINAIS
+  // RESULTADO
   // =========================
   document.getElementById("resultado").textContent = `
 Sabor: ${sabor.nome}
