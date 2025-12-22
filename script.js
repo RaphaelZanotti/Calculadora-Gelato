@@ -1,4 +1,8 @@
-console.log("SCRIPT CARREGADO");
+import { ingredientes } from "./data/ingredientes.js";
+
+
+
+
 
 document.getElementById("btnCalcular").onclick = function () {
   console.log("BOTÃO CLICADO");
