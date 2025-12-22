@@ -1,29 +1,27 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Gelato Formulator</title>
+  <meta charset="UTF-8" />
+  <title>Formulador Profissional de Gelato</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Formulador Profissional de Gelato & Sorbet</h1>
+<h1>Formulador Profissional de Gelato</h1>
 
-<label>Peso total (g):
-  <input type="number" id="pesoTotal" value="1000">
-</label>
+<label>Saborizante:</label>
+<select id="sabor">
+  <option value="pistache">Pistache</option>
+  <option value="chocolate">Chocolate</option>
+  <option value="morango">Morango</option>
+</select>
 
 <br><br>
 
-<label>Modo:
-  <select id="modo">
-    <option value="gelato">Gelato</option>
-    <option value="sorbet">Sorbet</option>
-  </select>
-</label>
+<label>Quantidade do saborizante (g):</label>
+<input type="number" id="qtdSabor" value="90">
 
-<h2>Saborizantes (g)</h2>
-<div id="inputs"></div>
+<br><br>
 
 <button onclick="calcular()">Calcular Receita</button>
 
