@@ -37,36 +37,35 @@ function calcular() {
   r.gordura += leite * INGREDIENTES.leite.gordura + creme * INGREDIENTES.creme.gordura;
   r.proteina += leite * INGREDIENTES.leite.proteina + creme * INGREDIENTES.creme.proteina;
 
-  // 2️⃣ Açúcares (estrutura correta)
-  let acucar = 0;
-  let dextrose = 0;
-  let glicose = 0;
+  // 2️⃣ Açúcares – base fixa (evita explosão)
+  const percAcucares = 0.18; // 18% do peso final estimado
+  const pesoBase = r.peso / (1 - percAcucares);
 
-  // Glicose obrigatória: ~6% do peso
-  glicose = r.peso * 0.06;
+  const totalAcucares = pesoBase * percAcucares;
 
+  // proporções clássicas
+  acucar   = totalAcucares * 0.50;
+  dextrose = totalAcucares * 0.30;
+  glicose  = totalAcucares * 0.20;
+
+  // aplicar glicose
   r.peso += glicose;
   r.solidos += glicose * INGREDIENTES.glicose.solidos;
   r.pod += glicose * INGREDIENTES.glicose.pod;
   r.pac += glicose * INGREDIENTES.glicose.pac;
 
-  // Sacarose → POD
-  acucar = (METAS.pod * r.peso - r.pod) / INGREDIENTES.acucar.pod;
-  acucar = Math.max(0, acucar);
-
+  // aplicar sacarose
   r.peso += acucar;
   r.solidos += acucar;
   r.pod += acucar * INGREDIENTES.acucar.pod;
   r.pac += acucar * INGREDIENTES.acucar.pac;
 
-  // Dextrose → PAC
-  dextrose = (METAS.pac * r.peso - r.pac) / INGREDIENTES.dextrose.pac;
-  dextrose = Math.max(0, dextrose);
-
+  // aplicar dextrose
   r.peso += dextrose;
   r.solidos += dextrose;
   r.pod += dextrose * INGREDIENTES.dextrose.pod;
   r.pac += dextrose * INGREDIENTES.dextrose.pac;
+
 
   // 3️⃣ Estabilizantes
   const guar = r.peso * INGREDIENTES.gomaGuar.limite;
