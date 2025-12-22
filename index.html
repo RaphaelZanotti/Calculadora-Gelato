@@ -2,14 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Formulador Profissional de Gelato</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Calculadora de Gelato</title>
 </head>
 <body>
 
-<h1>Formulador Profissional de Gelato</h1>
+  <h2>Calculadora de Gelato</h2>
 
-<label>Sabor:
+  <label>Sabor:</label>
   <select id="sabor">
     <option value="pistache">Pistache</option>
     <option value="morango">Morango in natura</option>
@@ -24,20 +23,18 @@
     <option value="baunilha">Baunilha</option>
     <option value="cumaru">Cumaru</option>
   </select>
-</label>
 
-<br><br>
+  <br><br>
 
-<label>Quantidade do sabor (g):
-  <input type="number" id="qtdSabor" value="100">
-</label>
+  <label>Quantidade do sabor (g):</label>
+  <input type="number" id="qtdSabor" value="100" min="1" />
 
-<br><br>
+  <br><br>
 
-<button onclick="calcular()">Calcular</button>
+  <button id="btnCalcular">Calcular</button>
 
-<pre id="resultado"></pre>
+  <pre id="resultado"></pre>
 
-<script type="module" src="script.js"></script>
+  <script type="module" src="./script.js"></script>
 </body>
 </html>

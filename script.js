@@ -1,3 +1,4 @@
+console.log("script carregado");
 import { ingredientes } from "./data/ingredientes.js";
 
 // =======================
