@@ -1,14 +1,8 @@
 import { ingredientes } from "./data/ingredientes.js";
 
-document.getElementById("btnCalcular")
-  .addEventListener("click", calcular);
-
-function calcular() {
-  console.log("Calculando...");
-  // resto do código
-}
-
-
+// =======================
+// CONFIGURAÇÃO
+// =======================
 const METAS = {
   solidos: 0.40,
   gordura: 0.10,
@@ -17,10 +11,29 @@ const METAS = {
   pac: 270
 };
 
-window.calcular = function () {
+const modo = "gelato"; // por enquanto fixo
+
+// =======================
+// EVENTO DO BOTÃO
+// =======================
+document
+  .getElementById("btnCalcular")
+  .addEventListener("click", calcular);
+
+// =======================
+// FUNÇÃO PRINCIPAL
+// =======================
+function calcular() {
+  console.clear();
 
   const saborKey = document.getElementById("sabor").value;
   const qtdSabor = Number(document.getElementById("qtdSabor").value);
+
+  if (!ingredientes[saborKey] || qtdSabor <= 0) {
+    alert("Selecione um sabor válido e quantidade maior que zero.");
+    return;
+  }
+
   const sabor = ingredientes[saborKey];
 
   let r = {
@@ -37,7 +50,12 @@ window.calcular = function () {
   // ========================
   let leiteEmPo = 0;
   if (r.proteina / r.peso < METAS.proteina) {
-    leiteEmPo = (METAS.proteina * r.peso - r.proteina) / ingredientes.leiteEmPo.proteina;
+    leiteEmPo =
+      (METAS.proteina * r.peso - r.proteina) /
+      ingredientes.leiteEmPo.proteina;
+
+    leiteEmPo = Math.max(0, leiteEmPo);
+
     r.peso += leiteEmPo;
     r.solidos += leiteEmPo;
     r.gordura += leiteEmPo * ingredientes.leiteEmPo.gordura;
@@ -51,7 +69,12 @@ window.calcular = function () {
   // ========================
   let creme = 0;
   if (r.gordura / r.peso < METAS.gordura) {
-    creme = (METAS.gordura * r.peso - r.gordura) / ingredientes.creme.gordura;
+    creme =
+      (METAS.gordura * r.peso - r.gordura) /
+      ingredientes.creme.gordura;
+
+    creme = Math.max(0, creme);
+
     r.peso += creme;
     r.solidos += creme * ingredientes.creme.solidos;
     r.gordura += creme * ingredientes.creme.gordura;
@@ -61,18 +84,24 @@ window.calcular = function () {
   // ========================
   // AÇÚCAR BASE → SACAROSE
   // ========================
-  let sacarose = (METAS.pod * r.peso - r.pod) / ingredientes.sacarose.pod;
-  sacarose = Math.max(0, sacarose);
+  let acucar =
+    (METAS.pod * r.peso - r.pod) /
+    ingredientes.acucar.pod;
 
-  r.peso += sacarose;
-  r.solidos += sacarose;
-  r.pod += sacarose * ingredientes.sacarose.pod;
-  r.pac += sacarose * ingredientes.sacarose.pac;
+  acucar = Math.max(0, acucar);
+
+  r.peso += acucar;
+  r.solidos += acucar;
+  r.pod += acucar * ingredientes.acucar.pod;
+  r.pac += acucar * ingredientes.acucar.pac;
 
   // ========================
   // AJUSTE PAC → DEXTROSE
   // ========================
-  let dextrose = (METAS.pac * r.peso - r.pac) / ingredientes.dextrose.pac;
+  let dextrose =
+    (METAS.pac * r.peso - r.pac) /
+    ingredientes.dextrose.pac;
+
   dextrose = Math.max(0, dextrose);
 
   r.peso += dextrose;
@@ -83,7 +112,9 @@ window.calcular = function () {
   // ========================
   // SÓLIDOS → MALTODEXTRINA
   // ========================
-  let maltodextrina = (METAS.solidos * r.peso - r.solidos);
+  let maltodextrina =
+    METAS.solidos * r.peso - r.solidos;
+
   maltodextrina = Math.max(0, maltodextrina);
 
   r.peso += maltodextrina;
@@ -99,35 +130,22 @@ window.calcular = function () {
   r.solidos += guar + lbg;
 
   // ========================
-  // ÁGUA (FECHAMENTO)
+  // FECHAMENTO COM LEITE
   // ========================
   let leite = 0;
-  let agua = 0;
 
-  if (modo === "gelato") {
-    const alvoSolidos = METAS.solidos;
-    let solidosAtuais = r.solidos / r.peso;
-
-    while (solidosAtuais < alvoSolidos) {
-        leite += 10; // passo de ajuste
-        r.peso += 10;
-        r.solidos += 10 * ingredientes.leite.solidos;
-        r.gordura += 10 * ingredientes.leite.gordura;
-        r.proteina += 10 * ingredientes.leite.proteina;
-        r.pod += 10 * ingredientes.leite.pod;
-        r.pac += 10 * ingredientes.leite.pac;
-
-        solidosAtuais = r.solidos / r.peso;
-    }
-} else {
-  // SORBET
-  agua =
-    r.peso * ((1 - METAS.solidos) / METAS.solidos);
-}
-
+  while (r.solidos / r.peso < METAS.solidos) {
+    leite += 10;
+    r.peso += 10;
+    r.solidos += 10 * ingredientes.leite.solidos;
+    r.gordura += 10 * ingredientes.leite.gordura;
+    r.proteina += 10 * ingredientes.leite.proteina;
+    r.pod += 10 * ingredientes.leite.pod;
+    r.pac += 10 * ingredientes.leite.pac;
+  }
 
   // ========================
-  // RESULTADO FINAL
+  // RESULTADO
   // ========================
   document.getElementById("resultado").textContent = `
 Sabor: ${sabor.nome}
@@ -135,19 +153,19 @@ Sabor: ${sabor.nome}
 Saborizante: ${qtdSabor.toFixed(1)} g
 Leite em pó: ${leiteEmPo.toFixed(1)} g
 Creme: ${creme.toFixed(1)} g
-Açúcar: ${sacarose.toFixed(1)} g
+Açúcar: ${acucar.toFixed(1)} g
 Dextrose: ${dextrose.toFixed(1)} g
 Maltodextrina: ${maltodextrina.toFixed(1)} g
 Goma guar: ${guar.toFixed(1)} g
 Goma alfarroba: ${lbg.toFixed(1)} g
-Água: ${agua.toFixed(1)} g
+Leite: ${leite.toFixed(1)} g
 
-Peso final da calda: ${(r.peso + agua).toFixed(1)} g
+Peso final da calda: ${r.peso.toFixed(1)} g
 
-Sólidos: ${(METAS.solidos * 100).toFixed(1)} %
+Sólidos: ${(r.solidos / r.peso * 100).toFixed(1)} %
 Gordura: ${(r.gordura / r.peso * 100).toFixed(1)} %
 Proteína: ${(r.proteina / r.peso * 100).toFixed(1)} %
 POD: ${(r.pod / r.peso).toFixed(0)}
 PAC: ${(r.pac / r.peso).toFixed(0)}
 `;
-};
+}
