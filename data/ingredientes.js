@@ -1,179 +1,182 @@
 export const ingredientes = {
 
   // =========================
-  // BASES LÁCTEAS
+  // SABORIZANTES
   // =========================
+
+  pistache: {
+    nome: "Pasta de pistache",
+    solidos: 1.00,
+    gordura: 0.45,
+    proteina: 0.16,
+    pod: 0.20,
+    pac: 0.25
+  },
+
+  morango: {
+    nome: "Morango in natura",
+    solidos: 0.10,
+    gordura: 0.00,
+    proteina: 0.01,
+    pod: 0.05,
+    pac: 0.10
+  },
+
+  coco: {
+    nome: "Coco (leite + ralado)",
+    solidos: 0.30,
+    gordura: 0.22,
+    proteina: 0.04,
+    pod: 0.10,
+    pac: 0.15
+  },
+
+  amendoim: {
+    nome: "Pasta de amendoim",
+    solidos: 1.00,
+    gordura: 0.50,
+    proteina: 0.25,
+    pod: 0.15,
+    pac: 0.20
+  },
+
+  avela: {
+    nome: "Pasta de avelã",
+    solidos: 1.00,
+    gordura: 0.60,
+    proteina: 0.15,
+    pod: 0.15,
+    pac: 0.20
+  },
+
+  misso: {
+    nome: "Pasta de missô",
+    solidos: 0.55,
+    gordura: 0.06,
+    proteina: 0.12,
+    pod: 0.05,
+    pac: 0.10
+  },
+
+  doceDeLeite: {
+    nome: "Doce de leite",
+    solidos: 0.70,
+    gordura: 0.08,
+    proteina: 0.05,
+    pod: 0.60,
+    pac: 0.65
+  },
+
+  caramelo: {
+    nome: "Caramelo salgado",
+    solidos: 0.85,
+    gordura: 0.05,
+    proteina: 0.01,
+    pod: 0.90,
+    pac: 0.95
+  },
+
+  chocolate: {
+    nome: "Chocolate",
+    solidos: 1.00,
+    gordura: 0.30,
+    proteina: 0.08,
+    pod: 0.25,
+    pac: 0.30
+  },
+
+  limao: {
+    nome: "Infusão de limão",
+    solidos: 0.03,
+    gordura: 0.00,
+    proteina: 0.00,
+    pod: 0.02,
+    pac: 0.05
+  },
+
+  baunilha: {
+    nome: "Baunilha",
+    solidos: 0.02,
+    gordura: 0.00,
+    proteina: 0.00,
+    pod: 0.01,
+    pac: 0.03
+  },
+
+  cumaru: {
+    nome: "Cumaru",
+    solidos: 0.05,
+    gordura: 0.02,
+    proteina: 0.01,
+    pod: 0.03,
+    pac: 0.06
+  },
+
+  // =========================
+  // BASE LÁCTEA
+  // =========================
+
   leite: {
-    nome: "Leite integral",
     solidos: 0.12,
     gordura: 0.035,
-    proteina: 0.033,
-    pod: 1,
-    pac: 1
+    proteina: 0.032,
+    pod: 0.05,
+    pac: 0.06
   },
 
   creme: {
-    nome: "Creme de leite",
-    solidos: 0.40,
+    solidos: 0.45,
     gordura: 0.35,
     proteina: 0.02,
-    pod: 1,
-    pac: 1
+    pod: 0.02,
+    pac: 0.03
   },
 
   leiteEmPo: {
-    nome: "Leite em pó integral",
-    solidos: 0.96,
-    gordura: 0.26,
-    proteina: 0.26,
-    pod: 1,
-    pac: 1
+    solidos: 1.00,
+    gordura: 0.01,
+    proteina: 0.36,
+    pod: 0.08,
+    pac: 0.10
   },
 
   // =========================
   // AÇÚCARES
   // =========================
+
   acucar: {
-    nome: "Açúcar sacarose",
-    solidos: 1,
-    gordura: 0,
-    proteina: 0,
-    pod: 100,
-    pac: 100
+    solidos: 1.00,
+    pod: 1.00,
+    pac: 1.00
   },
 
   dextrose: {
-    nome: "Dextrose",
-    solidos: 1,
-    gordura: 0,
-    proteina: 0,
-    pod: 74,
-    pac: 190
+    solidos: 1.00,
+    pod: 0.70,
+    pac: 1.90
+  },
+
+  glicose: {
+    solidos: 0.80,
+    pod: 0.60,
+    pac: 1.30
+  },
+
+  maltodextrina: {
+    solidos: 1.00,
+    pod: 0.10,
+    pac: 0.10
   },
 
   // =========================
   // ESTABILIZANTES
   // =========================
+
   gomaGuar: {
-    nome: "Goma guar",
-    solidos: 1,
-    limite: 0.003
+    limite: 0.0025
   },
 
   gomaAlfarroba: {
-    nome: "Goma alfarroba",
-    solidos: 1,
-    limite: 0.002
-  },
-
-  // =========================
-  // SABORES – PASTAS
-  // =========================
-  pistache: {
-    nome: "Pasta de pistache",
-    solidos: 0.99,
-    gordura: 0.55,
-    proteina: 0.20,
-    pod: 5,
-    pac: 5
-  },
-
-  avela: {
-    nome: "Pasta de avelã pura",
-    solidos: 0.99,
-    gordura: 0.60,
-    proteina: 0.15,
-    pod: 5,
-    pac: 5
-  },
-
-  amendoim: {
-    nome: "Pasta de amendoim",
-    solidos: 0.99,
-    gordura: 0.50,
-    proteina: 0.25,
-    pod: 5,
-    pac: 5
-  },
-
-  // =========================
-  // FRUTAS / BASE AQUOSA
-  // =========================
-  morango: {
-    nome: "Morango in natura",
-    solidos: 0.08,
-    gordura: 0,
-    proteina: 0.01,
-    pod: 6,
-    pac: 6
-  },
-
-  coco: {
-    nome: "Coco (leite + ralado)",
-    solidos: 0.25,
-    gordura: 0.20,
-    proteina: 0.02,
-    pod: 10,
-    pac: 10
-  },
-
-  // =========================
-  // LÁCTEOS AÇUCARADOS
-  // =========================
-  doceDeLeite: {
-    nome: "Doce de leite",
-    solidos: 0.75,
-    gordura: 0.08,
-    proteina: 0.06,
-    pod: 90,
-    pac: 90
-  },
-
-  caramelo: {
-    nome: "Caramelo salgado",
-    solidos: 0.90,
-    gordura: 0.05,
-    proteina: 0,
-    pod: 95,
-    pac: 95
-  },
-
-  // =========================
-  // INFUSÕES / AROMAS
-  // =========================
-  limao: {
-    nome: "Infusão de limão",
-    solidos: 0,
-    gordura: 0,
-    proteina: 0,
-    pod: 0,
-    pac: 0
-  },
-
-  baunilha: {
-    nome: "Baunilha",
-    solidos: 0,
-    gordura: 0,
-    proteina: 0,
-    pod: 0,
-    pac: 0
-  },
-
-  cumaru: {
-    nome: "Cumaru",
-    solidos: 0,
-    gordura: 0,
-    proteina: 0,
-    pod: 0,
-    pac: 0
-  },
-
-  misso: {
-    nome: "Pasta de missô",
-    solidos: 0.60,
-    gordura: 0.05,
-    proteina: 0.12,
-    pod: 10,
-    pac: 10
+    limite: 0.0025
   }
 };
