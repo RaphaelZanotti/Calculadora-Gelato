@@ -38,9 +38,12 @@ function calcular() {
   r.proteina += leite * INGREDIENTES.leite.proteina + creme * INGREDIENTES.creme.proteina;
 
   // 2️⃣ Açúcares – base fixa (evita explosão)
+  let acucar = 0;
+  let dextrose = 0;
+  let glicose = 0;
+
   const percAcucares = 0.18; // 18% do peso final estimado
   const pesoBase = r.peso / (1 - percAcucares);
-
   const totalAcucares = pesoBase * percAcucares;
 
   // proporções clássicas
