@@ -1,4 +1,4 @@
-import { ingredientes } from "./data/ingredientes.js"; 
+import { ingredientes } from "./data/ingredientes.js";
 
 const metasPorModo = {
   gelato: {
@@ -118,7 +118,7 @@ window.calcular = function () {
   const agua = Math.max(0, pesoTotal - totais.peso);
 
   // =========================
-  // NORMALIZAÇÃO POD / PAC
+  // NORMALIZAÇÃO PAC/POD
   // =========================
   const podFinal = totais.pod / pesoTotal;
   const pacFinal = totais.pac / pesoTotal;
@@ -139,7 +139,7 @@ Goma alfarroba: ${lbg.toFixed(1)} g
 Sólidos: ${(totais.solidos / pesoTotal * 100).toFixed(2)} %
 Gordura: ${(totais.gordura / pesoTotal * 100).toFixed(2)} %
 Proteína: ${(totais.proteina / pesoTotal * 100).toFixed(2)} %
-POD: ${podFinal.toFixed(0)}
+POD: ${podFinal.toFixed(0)} 
 PAC: ${pacFinal.toFixed(0)}
 `;
 };
