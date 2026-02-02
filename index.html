@@ -1,34 +1,23 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Calculadora de Gelato</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="app">
+        <table>
+            <tr>
+                <td>Leite Integral</td>
+                <td><input type="number" oninput="atualizarPeso('leiteIntegral', this.value)" value="510"></td>
+            </tr>
+            </table>
 
-<h2>Calculadora de Gelato 3</h2>
+        <div class="painel">
+            <div id="res-gordura">Gordura: -</div>
+            <div id="total-massa">0g</div>
+        </div>
+    </div>
 
-<label>Sabor:</label>
-<select id="sabor">
-  <option value="pistache">Pistache</option>
-  <option value="avela">Avelã</option>
-  <option value="morango">Morango</option>
-</select>
-
-<br><br>
-
-<label>Quantidade do sabor (g):</label>
-<input type="number" id="qtdSabor" value="100">
-
-<br><br>
-
-<button type="button" id="btnCalcular">Calcular</button>
-
-
-<pre id="resultado"></pre>
-
-<!-- MODULE CORRETO -->
-<script type="module" src="./script.js"></script>
-
+    <script type="module" src="main.js"></script>
 </body>
 </html>
