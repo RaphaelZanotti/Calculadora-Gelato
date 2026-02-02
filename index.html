@@ -1,20 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
+    <title>Gelato Formulator Pro</title>
 </head>
 <body>
-    <div id="app">
-        <table>
-            <tr>
-                <td>Leite Integral</td>
-                <td><input type="number" oninput="atualizarPeso('leiteIntegral', this.value)" value="510"></td>
-            </tr>
-            </table>
+    <div class="container">
+        <h1>Formulador de Gelato Profissional</h1>
+        
+        <div class="config-panel">
+            <label>Quanto de calda quer fazer? (g)</label>
+            <input type="number" id="inputPesoFinal" value="1000">
+            
+            <label>Qual o saborizante?</label>
+            <select id="selectSabor">
+                <option value="pastaPistache">Pistache Pura</option>
+                <option value="pastaAvela">Avelã Pura</option>
+                <option value="cacauPo">Cacau em Pó</option>
+            </select>
 
-        <div class="painel">
-            <div id="res-gordura">Gordura: -</div>
-            <div id="total-massa">0g</div>
+            <label>Qtd de Pasta/Sabor (g)</label>
+            <input type="number" id="inputQtdSabor" value="100">
+            
+            <button onclick="formularReceita()">CALCULAR RECEITA PERFEITA</button>
+        </div>
+
+        <div class="grid-main">
+            <div class="receita-output">
+                <h3>Ingredientes Sugeridos:</h3>
+                <ul id="listaIngredientes">
+                    </ul>
+            </div>
+            
+            <div class="results-panel">
+                <div id="res-gordura" class="metric-card">
+                    <span class="metric-label">Gordura</span>
+                    <span class="metric-value">-</span>
+                    <span class="metric-status">Aguardando...</span>
+                </div>
+                </div>
         </div>
     </div>
 

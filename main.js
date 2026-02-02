@@ -2,40 +2,21 @@ import { DB } from './ingredientes.js';
 import { GelatoCalculadora } from './Calculadora.js';
 
 const calc = new GelatoCalculadora(DB);
-let receitaAtiva = {
-    leiteIntegral: 510, cremeLeite: 120, pastaAvela: 100, 
-    açucar: 110, dextrose: 70, leitePoDesn: 45, inulina: 40, gomaGuar: 3
+
+window.formularReceita = () => {
+    const pesoTotal = parseFloat(document.getElementById('inputPesoFinal').value);
+    const saborId = document.getElementById('selectSabor').value;
+    const qtdSabor = parseFloat(document.getElementById('inputQtdSabor').value);
+
+    const novaReceita = calc.resolver(saborId, qtdSabor, pesoTotal);
+    renderTable(novaReceita);
+    atualizarBarras(novaReceita, pesoTotal);
 };
 
-function atualizarInterface() {
-    const resultados = calc.calcular(receitaAtiva);
-    
-    // Atualiza o DOM (Exemplo para Gordura)
-    document.getElementById('res-gordura').innerHTML = `Gordura: ${resultados.gordura.toFixed(1)}%`;
-    validar('res-gordura', resultados.gordura, 6, 12);
-    
-    // Repetir para os outros campos...
-    document.getElementById('total-massa').innerText = `${resultados.totalG.toFixed(0)}g`;
-}
-
-function validar(id, valor, min, max) {
-    const el = document.getElementById(id);
-    if (valor >= min && valor <= max) {
-        el.className = 'metric-card status-ok';
-        el.querySelector('.metric-status').innerText = '✓ Balanceado';
-    } else if (valor < min) {
-        el.className = 'metric-card status-low';
-        el.querySelector('.metric-status').innerText = '⚠ Abaixo do Ideal';
-    } else {
-        el.className = 'metric-card status-high';
-        el.querySelector('.metric-status').innerText = '⚠ Excesso';
+function renderTable(receita) {
+    const lista = document.getElementById('listaIngredientes');
+    lista.innerHTML = '';
+    for (let ing in receita) {
+        lista.innerHTML += `<li>${DB[ing].nome}: <strong>${receita[ing].toFixed(1)}g</strong></li>`;
     }
 }
-
-// Escutador de inputs
-window.atualizarPeso = (ing, valor) => {
-    receitaAtiva[ing] = parseFloat(valor) || 0;
-    atualizarInterface();
-};
-
-atualizarInterface();
